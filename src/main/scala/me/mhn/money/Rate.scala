@@ -1,6 +1,6 @@
 package me.mhn.money
 
-case class Rate[F <: Currency, T <: Currency](pair: CurrencyPair[F, T], rate: Double) {
+case class Rate(pair: CurrencyPair, rate: Double) {
   lazy val invert = Rate(pair.invert, 1 / rate)
   override def toString = pair + ": " + rateFormatted
 

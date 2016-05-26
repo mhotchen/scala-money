@@ -1,6 +1,6 @@
 package me.mhn.money
 
-case class CurrencyPair[L <: Currency, R <: Currency](left: L, right: R) {
+case class CurrencyPair(left: Currency, right: Currency) {
   lazy val invert = new CurrencyPair(right, left)
   override def toString = left + "/" + right
 

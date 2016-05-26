@@ -8,6 +8,13 @@ sealed trait Currency {
 
   def / (other: Currency) = CurrencyPair(this, other)
   def | (amount: Int) = Money(this, amount)
+
+  override def equals(that: scala.Any): Boolean = that match {
+    case that: Currency => that.code == code && that.fraction == fraction
+    case _ => super.equals(that)
+  }
+
+  override def toString = code
 }
 
 object Currency extends Enumeration {
@@ -22,18 +29,13 @@ object Currency extends Enumeration {
 
   implicit def valueToCurrency(value: Value): Currency = Currency(value)
 
-  def apply(currency: Value): Currency = new RealCurrency(code(currency), fraction(currency))
-  def apply(code: String, fraction: Int): Currency = new RealCurrency(code, fraction)
+  def apply(currency: Value): Currency = Currency(code(currency), fraction(currency))
+
+  def apply(codeArg: String, fractionArg: Int): Currency = new Currency {
+    override val code = codeArg
+    override val fraction = fractionArg
+  }
 
   def code(currency: Value): String = currencyData(currency)._1
   def fraction(currency: Value): Int = currencyData(currency)._2
-
-  private class RealCurrency(val code: String, val fraction: Int) extends Currency {
-    override def equals(that: scala.Any): Boolean = that match {
-      case that: Currency => that.code == code && that.fraction == fraction
-      case _ => super.equals(that)
-    }
-
-    override def toString = code
-  }
 }

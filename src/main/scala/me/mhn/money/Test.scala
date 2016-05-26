@@ -8,8 +8,9 @@ object Test extends App {
   val amountUsd  = usd|10000
   val amountUsd2 = amountUsd + 10000
 
-  val usdToGbp  = (usd/gbp)-> 0.6837
-  val usdToJpy  = (usd/jpy)-> 109.99
+  val usdToGbp  = usd/gbp -> 0.6837
+  val usdToJpy  = usd/jpy -> 109.99
+
   val jpyToUsd  = usdToJpy.invert
   val usdToJpy2 = jpyToUsd.invert.invert.invert
 

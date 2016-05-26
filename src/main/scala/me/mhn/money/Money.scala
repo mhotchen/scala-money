@@ -1,9 +1,10 @@
 package me.mhn.money
 
-case class Money[C <: Currency](
-  currency: C,
+case class Money(
+  currency: Currency,
   amount: Long
 ) {
+
   lazy val amountFormatted: String = currency.fraction match {
     case 0 => "%d" format amount
     case f => "%." + f + "f" format amount / math.pow(10, f)
@@ -11,11 +12,11 @@ case class Money[C <: Currency](
 
   override def toString = currency.toString + " " + amountFormatted
 
-  def + (that: Money[C]) = new Money(currency, amount + that.amount)
+  def + (that: Money) = new Money(currency, amount + that.amount)
   def + (i: Long) = new Money(currency, amount + i)
 
-  def - (that: Money[C]) = new Money(currency, amount - that.amount)
+  def - (that: Money) = new Money(currency, amount - that.amount)
   def - (i: Long) = new Money(currency, amount - i)
 
-  def * (rate: Rate[C, Currency]): Money[Currency] = new Conversion(this, rate)
+  def * (rate: Rate): Money = new Conversion(this, rate)
 }

@@ -1,19 +1,26 @@
 package me.mhn.money
 
+import scala.language.implicitConversions
+
 sealed trait Currency {
   val code: String
   val fraction: Int
+
+  def / (other: Currency) = CurrencyPair(this, other)
+  def | (amount: Int) = Money(this, amount)
 }
 
 object Currency extends Enumeration {
-  val Gbp, Usd, Eur, Jpy = Value
+  val GBP, USD, EUR, JPY = Value
 
   private val currencyData = Map(
-    Gbp -> ("GBP", 2),
-    Usd -> ("USD", 2),
-    Eur -> ("EUR", 2),
-    Jpy -> ("JPY", 0)
+    GBP -> ("GBP", 2),
+    USD -> ("USD", 2),
+    EUR -> ("EUR", 2),
+    JPY -> ("JPY", 0)
   )
+
+  implicit def valueToCurrency(value: Value): Currency = Currency(value)
 
   def apply(currency: Value): Currency = new RealCurrency(code(currency), fraction(currency))
   def apply(code: String, fraction: Int): Currency = new RealCurrency(code, fraction)

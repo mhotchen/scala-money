@@ -16,4 +16,6 @@ case class Money[C <: Currency](
 
   def - (that: Money[C]) = new Money(currency, amount - that.amount)
   def - (i: Long) = new Money(currency, amount - i)
+
+  def * (rate: Rate[C, Currency]): Money[Currency] = new Conversion(this, rate)
 }
